@@ -12,11 +12,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Hurtbox
+  - Hurtbox (Counterhit state)
+  - Hitbox
+  - Pushbox
+  - Collider
   - 
   - 
   - 
