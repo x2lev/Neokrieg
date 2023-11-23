@@ -8,9 +8,11 @@ public class BoxScript : MonoBehaviour
     [HideInInspector] public Dictionary<string, BoxCollider2D> boxes = new();
     [HideInInspector] public Color gizmoColor = Color.black;
     [HideInInspector] public GameObject player;
+    [HideInInspector] public PlayerScript playerScript;
     private void Start()
     {
         player = transform.parent.gameObject;
+        playerScript = player.GetComponent<PlayerScript>();
         BoxCollider2D[] b = GetComponents<BoxCollider2D>();
         for (int i = 0; i < b.Length; i++)
             boxes.Add("default-" + i, b[i]);
@@ -27,14 +29,16 @@ public class BoxScript : MonoBehaviour
     { 
         boxes.Clear();
     }
+    public void DrawBox(BoxCollider2D box)
+    {
+        Gizmos.color = gizmoColor;
+        Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);
+        Gizmos.color = gizmoColor.WithAlpha(.1f);
+        Gizmos.DrawCube(box.bounds.center, box.bounds.size);
+    }
     private void OnDrawGizmos()
     {
-        foreach (Collider2D box in boxes.Values)
-        {
-            Gizmos.color = gizmoColor;
-            Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);
-            Gizmos.color = gizmoColor.WithAlpha(.05f);
-            Gizmos.DrawCube(box.bounds.center, box.bounds.size);
-        }
+        foreach (BoxCollider2D box in boxes.Values)
+            DrawBox(box);
     }
 }

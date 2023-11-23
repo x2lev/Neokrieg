@@ -29,7 +29,7 @@ public class PlayerScript : MonoBehaviour
 
     private float frame;
     private const float pixel = 1/12f;
-    private void Awake()
+    private void Start()
     {
         frame = Time.frameCount;
     }
@@ -69,21 +69,20 @@ public class PlayerScript : MonoBehaviour
     public void FixedUpdate()
     {
         AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
-        float x = velocity.x;
-        float y = velocity.y - gravity * Time.deltaTime;
+        velocity.y -= gravity * Time.deltaTime;
 
         if (grounded)
         {
-            x = dpad.x * walkSpeed;
+            velocity.x = dpad.x * walkSpeed;
             if (dpad.y > 0)
-                y = jumpForce;
+                velocity.y = jumpForce;
         }
 
         blocking = dpad.x * direction < 0 && !attacking;
         crouching = grounded && dpad.y < 0;
 
         if (crouching || state.IsName("crouch"))
-            x = 0;
+            velocity.x = 0;
 
         if (player1)
         {
@@ -93,30 +92,23 @@ public class PlayerScript : MonoBehaviour
         if (Time.frameCount - frame > 48)
         {
             BoxCollider2D pushbox = transform.Find("Pushbox").GetComponent<BoxCollider2D>();
-            pushbox.offset = new Vector2(0, 1.541667f);
-            pushbox.size = new Vector2(1.166666f, 2.75f);
+            pushbox.offset = new Vector2(0, 18*pixel);
+            pushbox.size = new Vector2(14*pixel, 32*pixel);
         }
 
-        _animator.SetFloat("x_velocity", x * direction);
-        _animator.SetFloat("y_velocity", y);
+        _animator.SetFloat("x_velocity", velocity.x * direction);
+        _animator.SetFloat("y_velocity", velocity.y);
         _animator.SetBool("crouching", crouching);
         _animator.SetBool("grounded", grounded);
-
-        velocity = new Vector2(x, y);
 
         transform.position += velocity * Time.deltaTime;
 
         buttons = new() { false, false, false, false, false };
     }
-    private void OnCollisionExit2D(Collision2D collision)
+    public void Jumpbox(PushboxScript pb)
     {
-        if (collision.gameObject.name == "Floor")
-        {
-            frame = Time.frameCount;
-            BoxCollider2D pushbox = collision.otherCollider as BoxCollider2D;
-            pushbox.offset = new Vector2(0, 2.333333f);
-            pushbox.size = new Vector2(1.166667f, 1.166667f);
-            grounded = false;
-        }
+        frame = Time.frameCount;
+        pb.ClearColliders();
+        pb.AddCollider("jumpbox", new Vector2(0, 26*pixel), new Vector2(14*pixel, 14*pixel));
     }
 }

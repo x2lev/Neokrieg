@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PushboxScript : BoxScript
 {
+    public bool touchingWall;
     private void Awake()
     {
         gizmoColor = Color.yellow;
@@ -30,17 +32,18 @@ public class PushboxScript : BoxScript
         {
             if (parent.name == "Floor")
             {
-                player.GetComponent<PlayerScript>().grounded = true;
-                player.GetComponent<PlayerScript>().velocity.y = 0;
+                playerScript.grounded = true;
+                playerScript.velocity.y = 0;
                 player.transform.position += new Vector3(0, otherCollider.bounds.center.y - thisCollider.bounds.min.y, 0);
             }
             else if (parent.name == "Ceiling")
             {
-                player.GetComponent<PlayerScript>().velocity.y = 0;
+                playerScript.velocity.y = 0;
                 player.transform.position -= new Vector3(0, thisCollider.bounds.max.y - otherCollider.bounds.center.y, 0);
             }
             else
             {
+                touchingWall = true;
                 Bounds b1 = thisCollider.bounds;
                 Bounds b2 = otherCollider.bounds;
                 float overlapRight = (b1.center.x + b1.extents.x - b2.center.x + b2.extents.x) / 2;
@@ -62,8 +65,18 @@ public class PushboxScript : BoxScript
         {
             if (parent.name == "Floor")
             {
-                player.GetComponent<PlayerScript>().grounded = false;
+                playerScript.grounded = false;
+                playerScript.Jumpbox(this);
+                DrawBox(boxes["jumpbox"]);
+                SceneView.RepaintAll();
+                DrawBox(boxes["jumpbox"]);
             }
-        }
+            else if (parent.name == "Ceiling")
+            { }
+            else
+            {
+                touchingWall = false;
+            }
+        } 
     }
 }
