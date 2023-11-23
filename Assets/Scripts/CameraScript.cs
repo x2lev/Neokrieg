@@ -19,6 +19,8 @@ public class CameraScript : MonoBehaviour
         player2 = Instantiate(prefabs[Random.Range(0, prefabs.Capacity)]);
         script1 = player1.GetComponent<PlayerScript>();
         script2 = player2.GetComponent<PlayerScript>();
+        player1.name = "Player 1 (" + player1.name[..^7] + ")";
+        player2.name = "Player 2 (" + player2.name[..^7] + ")";
         player1.transform.position = new Vector3(-5, -5.15f, -1);
         player2.transform.position = new Vector3(5, -5.15f, 0);
         script1.player1 = true;
@@ -35,30 +37,6 @@ public class CameraScript : MonoBehaviour
         {
             script1.flip();
             script2.flip();
-        }
-    }
-    private void OnDrawGizmos()
-    {
-        foreach(BoxCollider2D box in GetComponents<BoxCollider2D>())
-        {
-            switch (box.gameObject.layer)
-            {
-                case 0: // Default
-                    Gizmos.color = Color.black;
-                    break;
-                case 6: // Hurtbox
-                    Gizmos.color = Color.green;
-                    break;
-                case 7: // Hurtbox (Counterhit state)
-                    Gizmos.color = Color.cyan;
-                    break;
-                case 8: // Hitbox
-                    Gizmos.color = Color.red;
-                    break;
-                case 9: // Pushbox
-                    Gizmos.color = Color.yellow;
-                    break;
-            }
         }
     }
 }

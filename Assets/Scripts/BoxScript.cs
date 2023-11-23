@@ -1,26 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoxScript : MonoBehaviour
 {
-    [SerializeField] List<BoxCollider2D> defaultBoxes = new();
-    Dictionary<string, BoxCollider2D> boxes;
-    void Start()
+    [HideInInspector] public Dictionary<string, BoxCollider2D> boxes = new();
+    [HideInInspector] public Color gizmoColor = Color.black;
+    [HideInInspector] public GameObject player;
+    private void Start()
     {
-        for (int i = 0; i < defaultBoxes.Count; i++)
-            boxes.Add("default-" + i, defaultBoxes[i]);
+        player = transform.parent.gameObject;
+        BoxCollider2D[] b = GetComponents<BoxCollider2D>();
+        for (int i = 0; i < b.Length; i++)
+            boxes.Add("default-" + i, b[i]);
     }
-    public virtual void AddCollider(string tag, Vector2 offset, Vector2 size)
+    public void AddCollider(string tag, Vector2 offset, Vector2 size)
     {
         boxes.Add(tag, new() { offset = offset, size = size, isTrigger = true });
     }
-    public virtual void RemoveCollider(string tag) 
+    public void RemoveCollider(string tag) 
     {
         boxes.Remove(tag);
     }
-    public virtual void ClearColliders()
+    public void ClearColliders()
     { 
-        boxes.Clear(); 
+        boxes.Clear();
+    }
+    private void OnDrawGizmos()
+    {
+        foreach (Collider2D box in boxes.Values)
+        {
+            Gizmos.color = gizmoColor;
+            Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);
+            Gizmos.color = gizmoColor.WithAlpha(.05f);
+            Gizmos.DrawCube(box.bounds.center, box.bounds.size);
+        }
     }
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8445379617649773534}
+  - component: {fileID: 9173067245458578434}
   m_Layer: 7
   m_Name: Hurtbox (Counterhit state)
   m_TagString: Untagged
@@ -31,37 +32,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1085725785237021239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6462422636517140530
-GameObject:
+--- !u!114 &9173067245458578434
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7773079717499055516}
-  m_Layer: 10
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7773079717499055516
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6462422636517140530}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1085725785237021239}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 539769729631020948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b245b07ea4bfa6449a90f6e28d310025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gizmoColor: {r: 0, g: 0, b: 0, a: 1}
+  player: {fileID: 0}
+  counterhit: 0
 --- !u!1 &7028355516032447170
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,9 +58,9 @@ GameObject:
   - component: {fileID: 1085725785237021239}
   - component: {fileID: 419225104116244974}
   - component: {fileID: 4046682422367705344}
-  - component: {fileID: 2421739019395299578}
   - component: {fileID: 155125617492564337}
   - component: {fileID: 416211043356544916}
+  - component: {fileID: 8577441893381709248}
   m_Layer: 0
   m_Name: Hero Knight
   m_TagString: Player
@@ -100,7 +85,6 @@ Transform:
   - {fileID: 8445379617649773534}
   - {fileID: 4772145782379273623}
   - {fileID: 868088282353954735}
-  - {fileID: 7773079717499055516}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &419225104116244974
@@ -167,15 +151,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07d7f0dd3d3e04e4dbdf6520901fb1bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 2421739019395299578}
   _animator: {fileID: 155125617492564337}
+  gravity: 40
   walkSpeed: 5
   runSpeed: 7.5
-  backDash: 7.5
-  jumpForce: 20
+  jumpForce: 15
   dpad: {x: 0, y: 0}
-  direction: 1
+  velocity: {x: 0, y: 0, z: 0}
   buttons: 0000000000
+  direction: 1
   grounded: 1
   crouching: 0
   blocking: 0
@@ -184,33 +168,6 @@ MonoBehaviour:
   attacking: 0
   recovery: 0
   player1: 0
---- !u!50 &2421739019395299578
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7028355516032447170}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 1
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 5
-  m_Material: {fileID: 6200000, guid: 9fda78a9bda9c9b48b105a62673308a2, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!95 &155125617492564337
 Animator:
   serializedVersion: 5
@@ -358,6 +315,33 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!50 &8577441893381709248
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7028355516032447170}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &7787999936273166327
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4758147967064081893}
   - component: {fileID: 2479502257941250329}
-  - component: {fileID: 3515841262843781833}
+  - component: {fileID: 1471391209414221083}
   m_Layer: 6
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -423,7 +407,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 3.75}
+  m_Offset: {x: 0, y: 1.8333334}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -434,9 +418,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 0.5}
+  m_Size: {x: 2, y: 3.3333333}
   m_EdgeRadius: 0
---- !u!114 &3515841262843781833
+--- !u!114 &1471391209414221083
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -445,11 +429,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7787999936273166327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31c6576e6cc17374fa1396e3c4056d64, type: 3}
+  m_Script: {fileID: 11500000, guid: b245b07ea4bfa6449a90f6e28d310025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultBoxes:
-  - {fileID: 2479502257941250329}
+  gizmoColor: {r: 0, g: 0, b: 0, a: 1}
+  player: {fileID: 0}
+  counterhit: 0
 --- !u!1 &8801124986398765477
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,6 +444,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4772145782379273623}
+  - component: {fileID: 7101811174852972943}
   m_Layer: 8
   m_Name: Hitbox
   m_TagString: Untagged
@@ -481,6 +467,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1085725785237021239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7101811174852972943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8801124986398765477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1066a0464cf24f845a042dafa5574fd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gizmoColor: {r: 0, g: 0, b: 0, a: 1}
+  player: {fileID: 0}
 --- !u!1 &9050095550551354281
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +543,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 1.541667}
@@ -571,3 +571,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb74d53a5e2ebf48af9e6faf549d710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gizmoColor: {r: 0, g: 0, b: 0, a: 1}
+  player: {fileID: 0}

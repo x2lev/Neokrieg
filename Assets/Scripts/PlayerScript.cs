@@ -1,24 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
 public class PlayerScript : MonoBehaviour
 {
-    public Rigidbody2D _rigidbody;
     public Animator _animator;
+
+    [Header("Physics")]
+    public float gravity = 1f;
     public float walkSpeed = 5f;
     public float runSpeed = 7.5f;
-    public float backDash = 7.5f;
     public float jumpForce = 5f;
     
     [HideInInspector] public Vector2 dpad = Vector2.zero;
-    [HideInInspector] public int direction = 1;
+    [HideInInspector] public Vector3 velocity = Vector3.zero;
     [HideInInspector] public List<bool> buttons = new() { false, false, false, false, false };
+    [HideInInspector] public int direction = 1;
     [HideInInspector] public bool grounded = true;
     [HideInInspector] public bool crouching = false;
     [HideInInspector] public bool blocking = false;
@@ -67,19 +66,17 @@ public class PlayerScript : MonoBehaviour
         buttons[0] = true;
     }
 
-    public virtual void LateFixedUpdate() { }
     public void FixedUpdate()
     {
         AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
-        float x = _rigidbody.velocity.x;
-        float y = _rigidbody.velocity.y;
+        float x = velocity.x;
+        float y = velocity.y - gravity * Time.deltaTime;
 
         if (grounded)
         {
             x = dpad.x * walkSpeed;
-            y = (dpad.y > 0) ? jumpForce : 0;
-            if (y > 0)
-                _animator.SetTrigger("jump");
+            if (dpad.y > 0)
+                y = jumpForce;
         }
 
         blocking = dpad.x * direction < 0 && !attacking;
@@ -89,8 +86,9 @@ public class PlayerScript : MonoBehaviour
             x = 0;
 
         if (player1)
-            Debug.Log("Dpad: " + dpad.ToString() + " Buttons: { " + string.Join(", ", buttons) + " } G: " + grounded + " C: " + crouching + " xy: " + new Vector2(x, y));
-
+        {
+            // Debug.Log("Dpad: " + dpad.ToString() + " Buttons: { " + string.Join(", ", buttons) + " } G: " + grounded + " C: " + crouching + " xy: " + new Vector2(x, y));
+        }
         
         if (Time.frameCount - frame > 48)
         {
@@ -103,45 +101,12 @@ public class PlayerScript : MonoBehaviour
         _animator.SetFloat("y_velocity", y);
         _animator.SetBool("crouching", crouching);
         _animator.SetBool("grounded", grounded);
-        LateFixedUpdate();
 
-        _rigidbody.velocity = new Vector2(x, y);
+        velocity = new Vector2(x, y);
+
+        transform.position += velocity * Time.deltaTime;
+
         buttons = new() { false, false, false, false, false };
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (player1)
-            Debug.Log(Time.frameCount - frame);
-        if (collision.gameObject.name == "Floor")
-        {
-            grounded = true;
-        }
-        else if (collision.collider.gameObject.name == "Pushbox")
-        {
-            Bounds b1 = collision.otherCollider.bounds;
-            Bounds b2 = collision.collider.bounds;
-            if (false)
-            {
-                Debug.Log(b1.min.y + " > " + (b2.max.y - .1f) + " || " + b2.min.y + " > " + (b1.max.y - .1f));
-                Debug.Log((b1.min.y > b2.max.y - .1f) + " || " + (b2.min.y > b1.max.y - .1f));
-                Debug.Log(b1.min.y > b2.max.y - .1f || b2.min.y > b1.max.y - .1f);
-            }
-            float l1= b1.center.x - b1.extents.x;
-            float r1= b1.center.x + b1.extents.x;
-            float l2= b2.center.x - b2.extents.x;
-            float r2= b2.center.x + b2.extents.x;
-            if (direction == 1 && r1 > l2 || direction == -1 && r2 > l1)
-            {
-                float distanceToMove;
-                if (direction == 1)
-                    distanceToMove = (r1 - l2) / 2 + .1f;
-                else
-                    distanceToMove = (r2 - l1) / 2 + .1f;
-                transform.position -= new Vector3(direction * distanceToMove, 0, 0);
-            }
-            else if (collision.collider.gameObject.name == "Hurtbox")
-                Debug.Log("hurtbox");
-        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
