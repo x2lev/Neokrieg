@@ -10,19 +10,25 @@ public class PushboxScript : BoxScript
     {
         gizmoColor = Color.yellow;
     }
+    public override void AddCollider(string tag, Vector2 offset, Vector2 size)
+    {
+        base.AddCollider(tag, offset, size);
+        boxes[tag].isTrigger = false;
+    }
     private void OnCollisionStay2D(Collision2D collision)
     {
         GameObject box= collision.collider.gameObject;
         GameObject parent= box.transform.parent.gameObject;
         Collider2D thisCollider= collision.otherCollider;
         Collider2D otherCollider= collision.collider;
-        Debug.Log("Hitting the " + box.name + " of " + parent.name);
+        // Debug.Log("Hitting the " + box.name + " of " + parent.name);
         if (box.name == "Pushbox")
         {
             Bounds b1 = thisCollider.bounds;
             Bounds b2 = otherCollider.bounds;
             float overlapRight = (b1.center.x + b1.extents.x - b2.center.x + b2.extents.x) / 2;
             float overlapLeft = (b2.center.x + b2.extents.x - b1.center.x + b1.extents.x) / 2;
+            Debug.Log("L=" + overlapLeft + " R=" + overlapRight);
             if (overlapRight < overlapLeft)
                 player.transform.position -= new Vector3(overlapRight, 0, 0);
             else
@@ -67,9 +73,7 @@ public class PushboxScript : BoxScript
             {
                 playerScript.grounded = false;
                 playerScript.Jumpbox(this);
-                DrawBox(boxes["jumpbox"]);
                 SceneView.RepaintAll();
-                DrawBox(boxes["jumpbox"]);
             }
             else if (parent.name == "Ceiling")
             { }

@@ -26,12 +26,14 @@ public class PlayerScript : MonoBehaviour
     [HideInInspector] public bool attacking = false;
     [HideInInspector] public int recovery = 0;
     [HideInInspector] public bool player1 = false;
+    [HideInInspector] public PushboxScript pushbox;
 
     private float frame;
     private const float pixel = 1/12f;
     private void Start()
     {
         frame = Time.frameCount;
+        pushbox = GetComponentInChildren<PushboxScript>();
     }
     public void flip()
     {
@@ -89,11 +91,10 @@ public class PlayerScript : MonoBehaviour
             // Debug.Log("Dpad: " + dpad.ToString() + " Buttons: { " + string.Join(", ", buttons) + " } G: " + grounded + " C: " + crouching + " xy: " + new Vector2(x, y));
         }
         
-        if (Time.frameCount - frame > 48)
+        if (Time.frameCount - frame > 30 && !grounded)
         {
-            BoxCollider2D pushbox = transform.Find("Pushbox").GetComponent<BoxCollider2D>();
-            pushbox.offset = new Vector2(0, 18*pixel);
-            pushbox.size = new Vector2(14*pixel, 32*pixel);
+            pushbox.ClearColliders();
+            pushbox.AddCollider("idle", new Vector2(0, 18 * pixel), new Vector2(14 * pixel, 32 * pixel));
         }
 
         _animator.SetFloat("x_velocity", velocity.x * direction);
