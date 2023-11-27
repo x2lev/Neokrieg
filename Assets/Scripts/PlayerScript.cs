@@ -9,33 +9,36 @@ public class PlayerScript : MonoBehaviour
     public Animator _animator;
 
     [Header("Physics")]
-    public float gravity = 1f;
-    public float walkSpeed = 5f;
-    public float runSpeed = 7.5f;
-    public float jumpForce = 5f;
-    
-    [HideInInspector] public Vector2 dpad = Vector2.zero;
-    [HideInInspector] public Vector3 velocity = Vector3.zero;
-    [HideInInspector] public List<bool> buttons = new() { false, false, false, false, false };
-    [HideInInspector] public int direction = 1;
-    [HideInInspector] public bool grounded = true;
-    [HideInInspector] public bool crouching = false;
-    [HideInInspector] public bool blocking = false;
-    [HideInInspector] public int blockStun = 0;
-    [HideInInspector] public int hitStun = 0;
-    [HideInInspector] public bool attacking = false;
-    [HideInInspector] public int recovery = 0;
-    [HideInInspector] public bool player1 = false;
-    [HideInInspector] public PushboxScript pushbox;
+    [SerializeField] float gravity = 1f;
+    [SerializeField] float walkSpeed = 5f;
+    [SerializeField] float runSpeed = 7.5f;
+    [SerializeField] float jumpForce = 5f;
 
+    [HideInInspector] public bool player1 = false;
+    [HideInInspector] public int direction = 1;
+    [HideInInspector] public int backToWall = 0;
+    [HideInInspector] public bool grounded = true;
+    [HideInInspector] public Vector3 velocity = Vector3.zero;
+
+    private Vector2 dpad = Vector2.zero;
+    private List<bool> buttons = new() { false, false, false, false, false };
+    private bool crouching = false;
+    private bool blocking = false;
+    private int blockStun = 0;
+    private int hitStun = 0;
+    private bool attacking = false;
+    private int recovery = 0;
+    private PushboxScript pushbox;
     private float frame;
+
     private const float pixel = 1/12f;
+    
     private void Start()
     {
         frame = Time.frameCount;
         pushbox = GetComponentInChildren<PushboxScript>();
     }
-    public void flip()
+    public void Flip()
     {
         Quaternion q = transform.rotation;
         q[1] = q[1]==0 ? 180 : 0;
@@ -71,6 +74,7 @@ public class PlayerScript : MonoBehaviour
     public void FixedUpdate()
     {
         AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
+
         velocity.y -= gravity * Time.deltaTime;
 
         if (grounded)
@@ -85,13 +89,8 @@ public class PlayerScript : MonoBehaviour
 
         if (crouching || state.IsName("crouch"))
             velocity.x = 0;
-
-        if (player1)
-        {
-            // Debug.Log("Dpad: " + dpad.ToString() + " Buttons: { " + string.Join(", ", buttons) + " } G: " + grounded + " C: " + crouching + " xy: " + new Vector2(x, y));
-        }
         
-        if (Time.frameCount - frame > 30 && !grounded)
+        if (transform.position.y + velocity.y * Time.deltaTime < -31/6f && !grounded)
         {
             pushbox.ClearColliders();
             pushbox.AddCollider("idle", new Vector2(0, 18 * pixel), new Vector2(14 * pixel, 32 * pixel));

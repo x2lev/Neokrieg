@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BoxScript : MonoBehaviour
 {
@@ -29,16 +28,27 @@ public class BoxScript : MonoBehaviour
     }
     public void RemoveCollider(string tag) 
     {
-        if (!boxes.ContainsKey(tag)) return;
-        Destroy(boxes[tag]);
-        boxes.Remove(tag);
+        if (boxes.ContainsKey(tag))
+        {
+            Destroy(boxes[tag]);
+            boxes.Remove(tag);
+        }
     }
     public void ClearColliders()
     { 
-        if (boxes.Count == 0) return;
+        if (boxes.Count > 0)
+        {
             foreach (BoxCollider2D box in boxes.Values.ToList())
                 Destroy(box);
-        boxes.Clear();
+            boxes.Clear();
+        }
+    }
+    public Vector3 GetCenter()
+    {
+        Vector3 center = Vector3.zero;
+        foreach (BoxCollider2D box in boxes.Values)
+            center += box.bounds.center;
+        return center/boxes.Count; 
     }
     private void OnDrawGizmos()
     {
