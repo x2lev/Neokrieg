@@ -10,6 +10,11 @@ public class PushboxScript : BoxScript
     {
         gizmoColor = Color.yellow;
     }
+    private void FixedUpdate()
+    {
+        if (player.transform.position.y + playerScript.velocity.y * Time.deltaTime < -31 / 6f && !playerScript.grounded)
+            playerScript.IdleBox(this);
+    }
     public override void AddCollider(string tag, Vector2 offset, Vector2 size)
     {
         base.AddCollider(tag, offset, size);

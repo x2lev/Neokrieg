@@ -24,9 +24,10 @@ public class BoxScript : MonoBehaviour
         box.offset = offset;
         box.size = size;
         box.isTrigger = true;
+        box.tag = tag;
         boxes.Add(tag, box);
     }
-    public void RemoveCollider(string tag) 
+    public virtual void RemoveCollider(string tag) 
     {
         if (boxes.ContainsKey(tag))
         {
@@ -34,8 +35,8 @@ public class BoxScript : MonoBehaviour
             boxes.Remove(tag);
         }
     }
-    public void ClearColliders()
-    { 
+    public virtual void ClearColliders()
+    {
         if (boxes.Count > 0)
         {
             foreach (BoxCollider2D box in boxes.Values.ToList())

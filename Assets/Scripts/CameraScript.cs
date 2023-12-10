@@ -33,7 +33,7 @@ public class CameraScript : MonoBehaviour
         float x = Mathf.Clamp((pos1.x+pos2.x)/2, -bound, bound);
         transform.position = new Vector3(x, transform.position.y, transform.position.z);
 
-        if (script1.backToWall != 0 && script2.backToWall != 0 && Mathf.Sign(pos2.x - pos1.x) != script1.direction)
+        if (script1.backToWall == 0 && script2.backToWall == 0 && Mathf.Sign(pos2.x - pos1.x) != script1.direction)
         {
             script1.Flip();
             script2.Flip();

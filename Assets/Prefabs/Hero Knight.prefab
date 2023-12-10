@@ -159,7 +159,7 @@ MonoBehaviour:
   jumpForce: 15
   player1: 0
   direction: 1
-  touchingWall: 0
+  backToWall: 0
   grounded: 1
   velocity: {x: 0, y: 0, z: 0}
 --- !u!95 &155125617492564337
@@ -229,7 +229,7 @@ MonoBehaviour:
       - m_Target: {fileID: 4046682422367705344}
         m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
         m_MethodName: On1
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -245,7 +245,7 @@ MonoBehaviour:
       - m_Target: {fileID: 4046682422367705344}
         m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
         m_MethodName: On2
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -261,7 +261,7 @@ MonoBehaviour:
       - m_Target: {fileID: 4046682422367705344}
         m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
         m_MethodName: On3
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -277,7 +277,7 @@ MonoBehaviour:
       - m_Target: {fileID: 4046682422367705344}
         m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
         m_MethodName: On4
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -293,7 +293,7 @@ MonoBehaviour:
       - m_Target: {fileID: 4046682422367705344}
         m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
         m_MethodName: OnOptions
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
