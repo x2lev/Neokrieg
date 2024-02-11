@@ -25,10 +25,7 @@ public class PlayerScript : MonoBehaviour
     private List<int> buttons = new();
     private bool crouching = false;
     private bool blocking = false;
-    private int blockStun = 0;
-    private int hitStun = 0;
     private bool attacking = false;
-    private int recovery = 0;
     private float frame;
 
     private const float pixel = 1/12f;
