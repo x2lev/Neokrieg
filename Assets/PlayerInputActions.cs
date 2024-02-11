@@ -228,6 +228,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""5e7a27d1-f7a0-4571-810c-a3f270f871c1"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dpad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2af55fcc-9ae5-4235-8011-82d4d13f1917"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
