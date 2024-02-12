@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -18,7 +20,6 @@ public class PushboxScript : BoxScript
     public override void AddCollider(string tag, Vector2 offset, Vector2 size)
     {
         base.AddCollider(tag, offset, size);
-        boxes[tag].isTrigger = false;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -95,6 +96,6 @@ public class PushboxScript : BoxScript
             {
                 playerScript.backToWall = 0;
             }
-        } 
+        }
     }
 }

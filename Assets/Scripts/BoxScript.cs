@@ -24,10 +24,15 @@ public class BoxScript : MonoBehaviour
         box.offset = offset;
         box.size = size;
         box.isTrigger = true;
-        box.tag = tag;
         boxes.Add(tag, box);
     }
-    public virtual void RemoveCollider(string tag) 
+    public virtual void SetColliders(List<Box> boxes)
+    {
+        ClearColliders();
+        foreach (Box b in boxes)
+            AddCollider(b.tag, b.offset, b.size);
+    }
+    public virtual void RemoveCollider(string tag)
     {
         if (boxes.ContainsKey(tag))
         {
@@ -49,7 +54,7 @@ public class BoxScript : MonoBehaviour
         Vector3 center = Vector3.zero;
         foreach (BoxCollider2D box in boxes.Values)
             center += box.bounds.center;
-        return center/boxes.Count; 
+        return center / boxes.Count;
     }
     private void OnDrawGizmos()
     {

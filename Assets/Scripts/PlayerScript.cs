@@ -21,6 +21,10 @@ public class PlayerScript : MonoBehaviour
     [HideInInspector] public bool grounded = true;
     [HideInInspector] public Vector3 velocity = Vector3.zero;
 
+    [HideInInspector] public HitboxScript hitb;
+    [HideInInspector] public HurtboxScript hurtb;
+    [HideInInspector] public PushboxScript pushb;
+
     private Vector2 dpad = Vector2.zero;
     private List<int> buttons = new();
     private bool crouching = false;
@@ -28,8 +32,8 @@ public class PlayerScript : MonoBehaviour
     private bool attacking = false;
     private float frame;
 
-    private const float pixel = 1/12f;
-    
+    private const float pixel = 1 / 12f;
+
     private void Start()
     {
         frame = Time.frameCount;
@@ -37,7 +41,7 @@ public class PlayerScript : MonoBehaviour
     public void Flip()
     {
         Quaternion q = transform.rotation;
-        q[1] = q[1]==0 ? 180 : 0;
+        q[1] = q[1] == 0 ? 180 : 0;
         transform.rotation = q;
         direction *= -1;
     }
@@ -57,12 +61,12 @@ public class PlayerScript : MonoBehaviour
         buttons.Sort();
 
         if (player1) { }
-            // Debug.Log("Dpad=" + dpad + " Buttons=" + string.Join(" ", buttons));
+        // Debug.Log("Dpad=" + dpad + " Buttons=" + string.Join(" ", buttons));
 
         AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
 
 
-        velocity.y -= velocity.y<0 ? 1.25f:1 * gravity * Time.deltaTime;
+        velocity.y -= velocity.y < 0 ? 1.25f : 1 * gravity * Time.deltaTime;
 
         if (grounded)
         {
@@ -92,6 +96,6 @@ public class PlayerScript : MonoBehaviour
     public void Jumpbox(PushboxScript pb)
     {
         pb.ClearColliders();
-        pb.AddCollider("jumpbox", new Vector2(0, 26*pixel), new Vector2(14*pixel, 14*pixel));
+        pb.AddCollider("jumpbox", new Vector2(0, 26 * pixel), new Vector2(14 * pixel, 14 * pixel));
     }
 }
