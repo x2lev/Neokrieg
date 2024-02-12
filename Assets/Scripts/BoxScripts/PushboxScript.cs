@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class PushboxScript : BoxScript
 {
@@ -14,12 +10,17 @@ public class PushboxScript : BoxScript
     }
     private void FixedUpdate()
     {
-        if (player.transform.position.y + playerScript.velocity.y * Time.deltaTime < -31 / 6f && !playerScript.grounded)
-            playerScript.IdleBox(this);
+        if (player.transform.position.y + playerScript.velocity.y * Time.deltaTime < -62 * playerScript.pixel && !playerScript.grounded)
+        {
+            if (playerScript.player1)
+                Debug.Log("predicted landing");
+            playerScript.land.Start();
+        }
     }
     public override void AddCollider(string tag, Vector2 offset, Vector2 size)
     {
         base.AddCollider(tag, offset, size);
+        boxes[tag].isTrigger = false;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -87,8 +88,7 @@ public class PushboxScript : BoxScript
             if (parent.name == "Floor")
             {
                 playerScript.grounded = false;
-                playerScript.Jumpbox(this);
-                // SceneView.RepaintAll();
+                playerScript.jump.Start();
             }
             else if (parent.name == "Ceiling")
             { }

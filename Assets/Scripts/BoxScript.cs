@@ -28,9 +28,12 @@ public class BoxScript : MonoBehaviour
     }
     public virtual void SetColliders(List<Box> boxes)
     {
-        ClearColliders();
-        foreach (Box b in boxes)
-            AddCollider(b.tag, b.offset, b.size);
+        if (boxes.Count > 0)
+        {
+            ClearColliders();
+            foreach (Box b in boxes)
+                AddCollider(b.tag, b.offset, b.size);
+        }
     }
     public virtual void RemoveCollider(string tag)
     {

@@ -162,6 +162,10 @@ MonoBehaviour:
   backToWall: 0
   grounded: 1
   velocity: {x: 0, y: 0, z: 0}
+  hurtb: {fileID: 0}
+  hitb: {fileID: 0}
+  pushb: {fileID: 0}
+  pixel: 0.083333336
 --- !u!95 &155125617492564337
 Animator:
   serializedVersion: 5
