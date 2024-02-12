@@ -25,9 +25,6 @@ public class HitboxScript : BoxScript
         Hitbox hitbox = (Hitbox) box;
         AddCollider(box.tag, box.offset, box.size, hitbox.angle, hitbox.priority);
     }
-    public override void SetColliders(List<Box> boxes) {
-        
-    }
     public override void RemoveCollider(string tag)
     {
         if (boxes.ContainsKey(tag))

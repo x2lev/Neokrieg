@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,22 +20,44 @@ public class PlayerScript : MonoBehaviour
     [HideInInspector] public bool grounded = true;
     [HideInInspector] public Vector3 velocity = Vector3.zero;
 
-    [HideInInspector] public HitboxScript hitb;
     [HideInInspector] public HurtboxScript hurtb;
+    [HideInInspector] public HitboxScript hitb;
     [HideInInspector] public PushboxScript pushb;
+    [HideInInspector] public Move jump;
+    [HideInInspector] public Move land;
+    [HideInInspector] public Move attack;
+    [HideInInspector] public Move activeMove;
 
     private Vector2 dpad = Vector2.zero;
     private List<int> buttons = new();
     private bool crouching = false;
     private bool blocking = false;
     private bool attacking = false;
-    private float frame;
 
-    private const float pixel = 1 / 12f;
+    [HideInInspector] public float pixel = 1 / 12f;
 
-    private void Start()
+    public void Start()
     {
-        frame = Time.frameCount;
+        jump = new(this, new() { 
+            new(1, new() { }, new() { }, new() { new("jump", new(0, 27 * pixel), new(14 * pixel, 14 * pixel)) }) 
+        });
+        land = new(this, new() { 
+            new(1, new() { }, new() { }, new() { new("land", new(0, 18 * pixel), new(14 * pixel, 32 * pixel)) })
+        });
+        attack = new(this, new() { 
+            new(6, new() { }, new() { new("attack0", new(12 * pixel, 30 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack1", new(12 * pixel, 28 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack2", new(12 * pixel, 26 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack3", new(12 * pixel, 24 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack4", new(12 * pixel, 22 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack5", new(12 * pixel, 20 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack6", new(12 * pixel, 18 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack7", new(12 * pixel, 16 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack8", new(12 * pixel, 14 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(6, new() { }, new() { new("attack9", new(12 * pixel, 12 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+            new(1, new() { }, new() { new("clear", Vector2.zero, Vector2.zero) }, new() { })
+        });
+        Debug.Log(string.Join(", ", attack.phases[0].hitboxes));
     }
     public void Flip()
     {
@@ -50,18 +71,24 @@ public class PlayerScript : MonoBehaviour
         dpad = context.ReadValue<Vector2>();
         dpad = new Vector2(Math.Sign(dpad.x), Math.Sign(dpad.y));
     }
-    public void On1() { buttons.Add(1); }
+    public void OnOptions() { buttons.Add(0); }
+    public void On1() { buttons.Add(1); Debug.Log(0); }
     public void On2() { buttons.Add(2); }
     public void On3() { buttons.Add(3); }
     public void On4() { buttons.Add(4); }
-    public void OnOptions() { buttons.Add(0); }
 
     public void FixedUpdate()
     {
+        activeMove?.Advance();
+
         buttons.Sort();
 
-        if (player1) { }
-        // Debug.Log("Dpad=" + dpad + " Buttons=" + string.Join(" ", buttons));
+        if (buttons.Contains(1) && activeMove != attack)
+        {
+            Debug.Log(1);
+            attack.Start();
+            attacking = true;
+        }
 
         AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
 
@@ -87,15 +114,7 @@ public class PlayerScript : MonoBehaviour
         _animator.SetBool("grounded", grounded);
 
         transform.position += velocity * Time.deltaTime;
-    }
-    public void IdleBox(PushboxScript pb)
-    {
-        pb.ClearColliders();
-        pb.AddCollider("idle", new Vector2(0, 18 * pixel), new Vector2(14 * pixel, 32 * pixel));
-    }
-    public void Jumpbox(PushboxScript pb)
-    {
-        pb.ClearColliders();
-        pb.AddCollider("jumpbox", new Vector2(0, 26 * pixel), new Vector2(14 * pixel, 14 * pixel));
+
+        buttons.Clear();
     }
 }
