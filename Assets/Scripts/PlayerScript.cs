@@ -31,30 +31,21 @@ public class PlayerScript : MonoBehaviour
     private Vector2 dpad = Vector2.zero;
     private List<int> buttons = new();
     private bool crouching = false;
-    private bool blocking = false;
-    private bool attacking = false;
 
     [HideInInspector] public float pixel = 1 / 12f;
 
     public void Start()
     {
-        jump = new(this, new() { 
-            new(1, new() { }, new() { }, new() { new("jump", new(0, 27 * pixel), new(14 * pixel, 14 * pixel)) }) 
+        jump = new(this, new() {
+            new(1, new() { }, new() { }, new() { new("jump", new(0, 27 * pixel), new(14 * pixel, 14 * pixel)) })
         });
-        land = new(this, new() { 
+        land = new(this, new() {
             new(1, new() { }, new() { }, new() { new("land", new(0, 18 * pixel), new(14 * pixel, 32 * pixel)) })
         });
-        attack = new(this, new() { 
-            new(6, new() { }, new() { new("attack0", new(12 * pixel, 30 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack1", new(12 * pixel, 28 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack2", new(12 * pixel, 26 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack3", new(12 * pixel, 24 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack4", new(12 * pixel, 22 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack5", new(12 * pixel, 20 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack6", new(12 * pixel, 18 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack7", new(12 * pixel, 16 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack8", new(12 * pixel, 14 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
-            new(6, new() { }, new() { new("attack9", new(12 * pixel, 12 * pixel), new(14 * pixel, 2 * pixel)) }, new() { }),
+        attack = new(this, new() {
+            new(12, new() { }, new() {
+                new("attack", new(8 * pixel, 49 * pixel), new(42 * pixel, 8 * pixel)) 
+            }, new() { }),
             new(1, new() { }, new() { new("clear", Vector2.zero, Vector2.zero) }, new() { })
         });
         Debug.Log(string.Join(", ", attack.phases[0].hitboxes));
@@ -83,26 +74,23 @@ public class PlayerScript : MonoBehaviour
 
         buttons.Sort();
 
-        if (buttons.Contains(1) && activeMove != attack)
-        {
-            Debug.Log(1);
-            attack.Start();
-            attacking = true;
-        }
-
         AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
 
-
+        // Gravity
         velocity.y -= velocity.y < 0 ? 1.25f : 1 * gravity * Time.deltaTime;
 
-        if (grounded)
+        if (grounded && activeMove is null)
         {
             velocity.x = dpad.x * walkSpeed;
+            if (buttons.Contains(1))
+            {
+                velocity.x = 0;
+                attack.Start();
+            }
             if (dpad.y > 0)
                 velocity.y = jumpForce;
         }
 
-        blocking = dpad.x * direction < 0 && !attacking;
         crouching = grounded && dpad.y < 0;
 
         if (crouching || state.IsName("crouch"))
