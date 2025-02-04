@@ -22,13 +22,12 @@ distance = -145.0
 
 [node name="Main" type="Node2D"]
 
-[node name="Camera" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("player")]
+position = Vector2(4, 0)
 zoom = Vector2(4, 4)
-limit_left = -288
-limit_top = -80
-limit_right = 288
-limit_bottom = 80
+process_callback = 0
 script = ExtResource("1_xb0eq")
+player = NodePath("../Player")
 
 [node name="Boundary" type="StaticBody2D" parent="Camera"]
 
@@ -46,6 +45,7 @@ shape = SubResource("WorldBoundaryShape2D_qlgfv")
 
 [node name="Player" parent="." instance=ExtResource("2_hjwti")]
 position = Vector2(0, 0)
+scale = Vector2(1.5, 1.5)
 
 [node name="Floor" type="Sprite2D" parent="."]
 texture_repeat = 2
