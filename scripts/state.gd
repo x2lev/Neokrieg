@@ -1,17 +1,16 @@
 class_name State
 extends Node2D
 
-func enter() -> void:
+signal change_state(state: State)
+
+func enter():
 	pass
 
-func exit() -> void:
+func exit():
 	pass
 
-func process_frame(delta: float)-> State:
-	return  null
+func process(_delta: float):
+	pass
 
-func process_physics(delta: float)-> State:
-	return  null
-
-func process_input(event: InputEvent)-> State:
-	return  null
+func physics_process(_delta: float):
+	pass

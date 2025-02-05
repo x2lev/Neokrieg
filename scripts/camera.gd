@@ -5,5 +5,5 @@ extends Camera2D
 func _ready():
 	pass
 
-func _process(_delta):
+func _process(_delta: float):
 	position.x = clamp(player.position.x/2, -144, 144)

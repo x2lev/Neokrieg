@@ -2,29 +2,25 @@ class_name StateMachine
 extends Node2D
 
 @export var starting_state: State
-
 var current_state: State
+var states: Dictionary = {}
 
-func init() -> void:
-    change_state(starting_state)
+func init():
+    for child in get_children():
+        if child is State:
+            states[child.name] = child
+            child.change_state.connect(on_change_state)
+    on_change_state(starting_state.name)
 
-func process_frame(delta: float) -> void:
-    var new_state: State = current_state.process_frame(delta)
-    if new_state:
-        change_state(new_state)
+func process(delta: float):
+    current_state.process(delta)
 
-func process_physics(delta: float) -> void:
-    var new_state: State = current_state.process_physics(delta)
-    if new_state:
-        change_state(new_state)
+func physics_process(delta: float):
+    current_state.physics_process(delta)
 
-func process_input(event: InputEvent) -> void:
-    var new_state: State = current_state.process_input(event)
-    if new_state:
-        change_state(new_state)
-
-func change_state(new_state: State) -> void:
+func on_change_state(new_state_name: String):
+    print(new_state_name)
     if current_state:
         current_state.exit()
-    current_state = new_state
+    current_state = states[new_state_name]
     current_state.enter()
