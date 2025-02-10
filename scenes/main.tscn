@@ -43,9 +43,10 @@ shape = SubResource("WorldBoundaryShape2D_mlca5")
 [node name="RightWall" type="CollisionShape2D" parent="Camera/Boundary"]
 shape = SubResource("WorldBoundaryShape2D_qlgfv")
 
-[node name="Player" parent="." instance=ExtResource("2_hjwti")]
+[node name="Player" parent="." node_paths=PackedStringArray("opponent") instance=ExtResource("2_hjwti")]
 position = Vector2(0, 0)
 scale = Vector2(1.5, 1.5)
+opponent = NodePath("../Camera")
 
 [node name="Floor" type="Sprite2D" parent="."]
 texture_repeat = 2

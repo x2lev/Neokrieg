@@ -1,6 +1,6 @@
-class_name IdleState
+class_name CrouchState
 extends GroundState
 
 func enter():
     player.velocity.x = 0
-    player.animation.play('idle')
+    player.animation.play('crouch')
